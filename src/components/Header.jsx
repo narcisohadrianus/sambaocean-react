@@ -4,8 +4,9 @@ import { nav, contacts } from '../data/site';
 import Icon from './Icon';
 
 /**
- * Cabeçalho fixo (fundo azul da marca): logótipo à esquerda e, à direita,
- * uma linha de utilidades (telefone, e-mail, pedir proposta) e o menu principal.
+ * Cabeçalho fixo (fundo azul da marca): logótipo à esquerda, linha de utilidades
+ * (telefone, e-mail, pedir proposta) em cima à direita e, por baixo, o menu
+ * principal centrado na largura do cabeçalho.
  * Abaixo de 980px o menu passa a um painel que abre com o botão "hambúrguer".
  */
 export default function Header() {
@@ -79,49 +80,47 @@ export default function Header() {
             <img src="/img/logo-branco.png" alt="SAMBA OCEAN" width="600" height="220" />
           </Link>
 
-          <div className="header-right">
-            <ul className="header-utility" aria-label="Contactos rápidos">
-              <li>
-                <a href={contacts.phoneHref}>
-                  <Icon name="phone" size={13} strokeWidth={1.6} />
-                  {contacts.phone}
-                </a>
-              </li>
-              <li>
-                <a href={contacts.emailHref}>
-                  <Icon name="mail" size={13} strokeWidth={1.6} />
-                  {contacts.email}
-                </a>
-              </li>
-              <li>
-                <Link to="/contactos#proposta" className="utility-cta">
-                  Pedir proposta
-                </Link>
-              </li>
-            </ul>
+          <ul className="header-utility" aria-label="Contactos rápidos">
+            <li>
+              <a href={contacts.phoneHref}>
+                <Icon name="phone" size={13} strokeWidth={1.6} />
+                {contacts.phone}
+              </a>
+            </li>
+            <li>
+              <a href={contacts.emailHref}>
+                <Icon name="mail" size={13} strokeWidth={1.6} />
+                {contacts.email}
+              </a>
+            </li>
+            <li>
+              <Link to="/contactos#proposta" className="utility-cta">
+                Pedir proposta
+              </Link>
+            </li>
+          </ul>
 
-            <nav className="main-nav" aria-label="Menu principal">
-              <ul>
-                {nav.map((item) => (
-                  <li key={item.to} className={item.children ? 'has-dropdown' : undefined}>
-                    <NavLink to={item.to} end={item.to === '/'}>
-                      {item.label}
-                      {item.children && <Icon name="chevronDown" size={12} strokeWidth={2} className="nav-caret" />}
-                    </NavLink>
-                    {item.children && (
-                      <ul className="dropdown">
-                        {item.children.map((c) => (
-                          <li key={c.to}>
-                            <Link to={c.to}>{c.label}</Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
+          <nav className="main-nav" aria-label="Menu principal">
+            <ul>
+              {nav.map((item) => (
+                <li key={item.to} className={item.children ? 'has-dropdown' : undefined}>
+                  <NavLink to={item.to} end={item.to === '/'}>
+                    {item.label}
+                    {item.children && <Icon name="chevronDown" size={12} strokeWidth={2} className="nav-caret" />}
+                  </NavLink>
+                  {item.children && (
+                    <ul className="dropdown">
+                      {item.children.map((c) => (
+                        <li key={c.to}>
+                          <Link to={c.to}>{c.label}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
 
           <button
             ref={toggleRef}

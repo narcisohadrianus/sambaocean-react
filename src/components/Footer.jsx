@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { company, contacts, footerNav, officialData } from '../data/site';
+import { contacts, footer } from '../data/site';
 import Icon, { WhatsAppIcon } from './Icon';
-
-const nif = officialData.find((d) => d.label === 'NIF')?.value;
-const matricula = officialData.find((d) => d.label === 'Matrícula')?.value;
 
 const reduceMotion = () =>
   typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -32,74 +29,97 @@ function ScrollTop() {
   );
 }
 
+/** Ícone de um botão redondo / de um contacto */
+function FooterIcon({ name, size }) {
+  return name === 'whatsapp' ? <WhatsAppIcon size={size} /> : <Icon name={name} size={size} strokeWidth={1.6} />;
+}
+
+/**
+ * Rodapé em 4 colunas (ao estilo do site HONESUS): marca + descrição + botões
+ * redondos de contacto, Empresa, Serviços e Contactos; por baixo, uma barra com
+ * os direitos reservados e os dados oficiais (NIF e matrícula).
+ */
 export default function Footer() {
   return (
     <>
       <footer className="site-footer">
-        {/* Faixa azul-clara com ícones de contacto (a SAMBA OCEAN não tem redes sociais) */}
-        <div className="footer-strip">
-          <ul className="container" aria-label="Contactos directos">
-            <li>
-              <a href={contacts.phoneHref} aria-label={`Telefone ${contacts.phone}`}>
-                <Icon name="phone" size={20} strokeWidth={1.6} />
-              </a>
-            </li>
-            <li>
-              <a href={contacts.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp (abre numa nova janela)">
-                <WhatsAppIcon size={20} />
-              </a>
-            </li>
-            <li>
-              <a href={contacts.emailHref} aria-label={`E-mail ${contacts.email}`}>
-                <Icon name="mail" size={20} strokeWidth={1.6} />
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div className="footer-main">
-          <div className="container">
-            <Link to="/" className="footer-logo" aria-label="SAMBA OCEAN — página inicial">
-              <img src="/img/logo-branco.png" alt="SAMBA OCEAN" width="600" height="220" loading="lazy" />
-            </Link>
-
-            <nav aria-label="Menu do rodapé">
-              <ul className="footer-nav">
-                {footerNav.map((item) => (
-                  <li key={item.to}>
-                    <Link to={item.to}>{item.label}</Link>
+        <div className="container footer-container">
+          <div className="footer-grid">
+            <div className="footer-brand">
+              <Link to="/" className="footer-logo" aria-label="SAMBA OCEAN — página inicial">
+                <img src="/img/logo-branco.png" alt="SAMBA OCEAN" width="600" height="220" loading="lazy" />
+              </Link>
+              <p className="footer-desc">{footer.description}</p>
+              <ul className="footer-social" aria-label="Contactos directos">
+                {footer.quickLinks.map((q) => (
+                  <li key={q.icon}>
+                    <a
+                      href={q.href}
+                      aria-label={q.label}
+                      {...(q.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    >
+                      <FooterIcon name={q.icon} size={18} />
+                    </a>
                   </li>
                 ))}
               </ul>
-            </nav>
-
-            <hr />
-
-            <ul className="footer-info">
-              <li>
-                <span className="footer-label">Telefone / WhatsApp</span>
-                <a href={contacts.phoneHref}>{contacts.phone}</a>
-              </li>
-              <li>
-                <span className="footer-label">E-mail</span>
-                <a href={contacts.emailHref}>{contacts.email}</a>
-              </li>
-              <li>
-                <span className="footer-label">Sede</span>
-                <address>{contacts.address}</address>
-              </li>
-              <li>
-                <span className="footer-label">Matrícula</span>
-                <span>{matricula}</span>
-              </li>
-            </ul>
-
-            <div className="footer-bottom">
-              <p>
-                © {company.year} {company.footerName}
-              </p>
-              <p>NIF {nif}</p>
             </div>
+
+            {footer.columns.map((col, i) => (
+              <nav className="footer-col" key={col.title} aria-labelledby={`rodape-col-${i}`}>
+                <h2 className="footer-heading" id={`rodape-col-${i}`}>
+                  {col.title}
+                </h2>
+                <ul className="footer-links">
+                  {col.links.map((l) => (
+                    <li key={l.to}>
+                      <Link to={l.to}>{l.label}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
+
+            <div className="footer-col">
+              <h2 className="footer-heading">{footer.contactsTitle}</h2>
+              <ul className="footer-contacts">
+                <li>
+                  <Icon name="pin" size={18} strokeWidth={1.6} className="footer-contact-icon" />
+                  <address>
+                    {footer.addressLines.map((l) => (
+                      <span key={l}>{l}</span>
+                    ))}
+                  </address>
+                </li>
+                <li>
+                  <Icon name="phone" size={18} strokeWidth={1.6} className="footer-contact-icon" />
+                  <a href={contacts.phoneHref}>{contacts.phone}</a>
+                </li>
+                <li>
+                  <Icon name="mail" size={18} strokeWidth={1.6} className="footer-contact-icon" />
+                  <a href={contacts.emailHref}>{contacts.email}</a>
+                </li>
+                <li>
+                  <WhatsAppIcon size={18} className="footer-contact-icon" />
+                  <a href={contacts.whatsapp} target="_blank" rel="noopener noreferrer">
+                    WhatsApp<span className="sr-only"> (abre numa nova janela)</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className="footer-bar">
+          <div className="container footer-container footer-bar-inner">
+            <p>{footer.copyright}</p>
+            <ul className="footer-legal">
+              {footer.legal.map((d) => (
+                <li key={d.label}>
+                  {d.label} {d.value}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </footer>

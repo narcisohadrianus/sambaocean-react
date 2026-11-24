@@ -11,7 +11,7 @@ export default function Sobre() {
 
   return (
     <>
-      <PageBanner title="Quem somos" image={images.camiaoEquipa} position="center 45%" crumbs={[{ label: 'Quem somos' }]} />
+      <PageBanner title="Quem somos" image={images.equipaPorto} position="center 40%" crumbs={[{ label: 'Quem somos' }]} />
 
       {/* Quem somos */}
       <section className="section" aria-labelledby="quem-somos-title">
@@ -102,7 +102,7 @@ export default function Sobre() {
         </div>
       </section>
 
-      <CtaBand />
+      <CtaBand image={images.equipaBriefing} position="center 45%" />
     </>
   );
 }

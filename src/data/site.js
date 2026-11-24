@@ -63,8 +63,48 @@ export const nav = [
   { to: '/contactos', label: 'Contactos' },
 ];
 
-/* Menu do rodapé */
+/* Lista simples das páginas (usada também na página 404) */
 export const footerNav = nav.map(({ to, label }) => ({ to, label }));
+
+/* ---------- Rodapé (4 colunas: marca · empresa · serviços · contactos) ---------- */
+export const footer = {
+  description:
+    'Soluções logísticas e operacionais para empresas que precisam de mover mercadoria e operar com eficiência em todo o país.',
+  /* Botões redondos por baixo da descrição (a SAMBA OCEAN não tem redes sociais) */
+  quickLinks: [
+    { icon: 'whatsapp', href: 'https://wa.me/244924188376', label: 'WhatsApp (abre numa nova janela)', external: true },
+    { icon: 'phone', href: 'tel:+244924188376', label: 'Ligar para +244 924 188 376' },
+    { icon: 'mail', href: 'mailto:geral@sambaocean.com', label: 'Enviar e-mail para geral@sambaocean.com' },
+  ],
+  columns: [
+    {
+      title: 'Empresa',
+      links: [
+        { to: '/', label: 'Início' },
+        { to: '/sobre', label: 'Quem somos' },
+        { to: '/sectores', label: 'Sectores' },
+        { to: '/porque-nos', label: 'Porquê nós' },
+        { to: '/contactos', label: 'Contactos' },
+      ],
+    },
+    {
+      title: 'Serviços',
+      links: [
+        { to: '/servicos#transporte', label: 'Transporte Interprovincial' },
+        { to: '/servicos#estiva', label: 'Equipas de Estiva' },
+        { to: '/servicos#maquinas', label: 'Aluguer de Máquinas' },
+        { to: '/servicos#como-actuamos', label: 'Como actuamos' },
+      ],
+    },
+  ],
+  contactsTitle: 'Contactos',
+  addressLines: ['Condomínio Boulevard Benfica, Torre B1, Casa nº 502', 'Talatona — Luanda, Angola'],
+  copyright: '© 2026 SAMBA OCEAN – Prestação de Serviços, Lda. Todos os direitos reservados',
+  legal: [
+    { label: 'NIF', value: '5003456773' },
+    { label: 'Matrícula', value: '40138-26/260818' },
+  ],
+};
 
 /* ---------- Metadados (título + descrição por página) ---------- */
 export const meta = {
@@ -124,6 +164,11 @@ export const images = {
   sectorPortos: { src: '/img/sector-portos.webp', w: 1054, h: 725, alt: 'Terminal portuário com gruas e contentores' },
   sectorIndustria: { src: '/img/sector-industria.webp', w: 1040, h: 725, alt: 'Profissional de colete refletor num pavilhão industrial' },
   sectorConstrucao: { src: '/img/sector-construcao.webp', w: 1040, h: 725, alt: 'Trabalhadores de capacete numa obra de construção civil' },
+  estivaPorto: { src: '/img/estiva-porto-sacaria.webp', w: 1600, h: 1200, alt: 'Equipa de estiva da SAMBA OCEAN, de colete e capacete, a descarregar sacos de mercadoria no cais do porto' },
+  estivaCais: { src: '/img/estiva-cais-porto.webp', w: 900, h: 600, alt: 'Estivadores da SAMBA OCEAN a movimentar sacaria no cais, com um navio atracado ao fundo' },
+  estivaPorao: { src: '/img/estiva-porao-navio.webp', w: 720, h: 480, alt: 'Vista de cima de estivadores da SAMBA OCEAN a manusear sacos no porão de um navio' },
+  equipaBriefing: { src: '/img/equipa-briefing-porto.webp', w: 1280, h: 720, alt: 'Responsável da SAMBA OCEAN a orientar a equipa de operações no porto, junto a contentores e a um navio' },
+  equipaPorto: { src: '/img/equipa-estiva-porto.webp', w: 1600, h: 1200, alt: 'Equipa de estiva da SAMBA OCEAN, de colete e capacete, reunida no terminal portuário' },
 };
 
 /* ---------- Carrossel da página inicial (4 destaques) ---------- */
@@ -146,8 +191,8 @@ export const heroSlides = [
     title: 'Equipas de Estiva',
     text: 'Equipas treinadas para carga e descarga com máxima segurança e rapidez.',
     cta: { label: 'Saiba mais', to: '/servicos#estiva' },
-    image: images.armazemEstiva,
-    position: 'center 30%',
+    image: images.estivaPorto,
+    position: 'center 40%',
   },
   {
     title: 'Aluguer de Máquinas',
@@ -229,12 +274,12 @@ export const services = [
     intro: 'Disponibilizamos equipas treinadas para operações de carga e descarga com máxima segurança e rapidez.',
     items: [
       { icon: 'container', title: 'Carga e descarga de camiões e contentores', image: images.estivaDescarga },
-      { icon: 'package', title: 'Manuseamento de mercadoria pesada e delicada', image: images.estivaCarga },
+      { icon: 'package', title: 'Manuseamento de mercadoria pesada e delicada', image: images.estivaPorao },
       { icon: 'warehouse', title: 'Organização logística em armazéns e obras', image: images.armazemCarga },
     ],
     highlight: { label: 'Equipas treinadas', text: 'Carga e descarga com máxima segurança e rapidez' },
-    image: images.estivaDescarga,
-    cardImage: images.estivaCarga,
+    image: images.estivaPorto,
+    cardImage: images.estivaPorao,
   },
   {
     id: 'maquinas',
@@ -289,7 +334,7 @@ export const sectors = {
       title: 'Portos e Terminais',
       text: 'Movimentação e descarga de contentores.',
       related: ['Equipas de Estiva', 'Aluguer de Máquinas'],
-      image: images.sectorPortos,
+      image: images.estivaCais,
     },
     {
       number: '02',
