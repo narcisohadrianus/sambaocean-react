@@ -524,7 +524,8 @@
 .scroll-top {
   bottom: 16px;
   padding: 0;
-  background: var(--sky-ui);
+  background: var(--navy);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
