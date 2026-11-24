@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 import usePageMeta from '../hooks/usePageMeta';
-import { meta, contacts, company, formServices, provinces, images } from '../data/site';
-import PageHero from '../components/PageHero';
-import SectionHeading from '../components/SectionHeading';
+import { meta, contacts, formServices, provinces, images } from '../data/site';
+import PageBanner from '../components/PageBanner';
 import Reveal from '../components/Reveal';
-import Icon, { WhatsAppIcon } from '../components/Icon';
+import Icon, { WhatsAppIcon, BtnArrow } from '../components/Icon';
+import { MainTitle } from '../components/Sections';
 
 const initial = {
   nome: '',
@@ -140,56 +140,41 @@ export default function Contactos() {
 
   return (
     <>
-      <PageHero
-        eyebrow="09 — Contactos"
-        title="Contactos"
-        text={company.closingTagline}
-        image={images.estivaDescarga}
-        position="center 35%"
-        crumbs={[{ label: 'Contactos' }]}
-      />
+      <PageBanner title="Contactos" image={images.hero} position="center 40%" crumbs={[{ label: 'Contactos' }]} />
 
       <section className="section" aria-labelledby="fale-title">
         <div className="container">
-          <SectionHeading
-            eyebrow="Fale connosco"
+          <MainTitle
+            id="fale-title"
             title="Estamos em Talatona, Luanda"
             intro="Ligue, escreva ou envie uma mensagem pelo WhatsApp. Respondemos com uma proposta comercial formal em 24h."
-            id="fale-title"
-            split
           />
-          <ul className="contact-cards">
+          <ul className="contact-tiles">
             {contactCards.map((c, i) => (
-              <Reveal as="li" key={c.label} delay={i * 70} className="contact-card">
+              <Reveal as="li" key={c.label} delay={i * 60} className="contact-tile">
                 <span className="contact-icon">{c.icon}</span>
-                <div>
-                  <h3>{c.label}</h3>
-                  {c.href ? (
-                    <a
-                      href={c.href}
-                      {...(c.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                    >
-                      {c.value}
-                      {c.external && <span className="sr-only"> (abre numa nova janela)</span>}
-                    </a>
-                  ) : (
-                    <address>{c.value}</address>
-                  )}
-                </div>
+                <h3>{c.label}</h3>
+                {c.href ? (
+                  <a href={c.href} {...(c.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                    {c.value}
+                    {c.external && <span className="sr-only"> (abre numa nova janela)</span>}
+                  </a>
+                ) : (
+                  <address>{c.value}</address>
+                )}
               </Reveal>
             ))}
           </ul>
         </div>
       </section>
 
-      <section className="section section-tint" id="proposta" aria-labelledby="proposta-title">
+      <section className="grey-band band-pad" id="proposta" aria-labelledby="proposta-title">
         <div className="container contact-layout">
           <div className="form-wrap">
-            <SectionHeading
-              eyebrow="Proposta formal em 24h"
+            <MainTitle
+              id="proposta-title"
               title="Pedido de proposta"
               intro="Preencha os dados e escolha como prefere enviar: por e-mail ou por WhatsApp. A mensagem abre já pré-preenchida."
-              id="proposta-title"
             />
             <form ref={formRef} className="quote-form" noValidate onSubmit={onSubmit}>
               <div
@@ -272,12 +257,18 @@ export default function Contactos() {
                 não são guardados neste site: são apenas usados para preparar a sua mensagem.
               </p>
 
-              <div className="form-actions">
-                <button type="submit" name="canal" value="email" className="btn btn-primary btn-lg">
-                  <Icon name="mail" size={20} /> Enviar por e-mail
+              <div className="btn-row">
+                <button type="submit" name="canal" value="email" className="main-btn-reverse is-wide">
+                  <span className="btn-label">
+                    <Icon name="mail" size={18} strokeWidth={1.6} /> Enviar por e-mail
+                  </span>
+                  <BtnArrow />
                 </button>
-                <button type="submit" name="canal" value="whatsapp" className="btn btn-whatsapp btn-lg">
-                  <WhatsAppIcon size={20} /> Enviar por WhatsApp
+                <button type="submit" name="canal" value="whatsapp" className="main-btn is-wide">
+                  <span className="btn-label">
+                    <WhatsAppIcon size={18} /> Enviar por WhatsApp
+                  </span>
+                  <BtnArrow />
                 </button>
               </div>
             </form>
@@ -295,9 +286,7 @@ export default function Contactos() {
                 />
               </div>
               <div className="map-info">
-                <span className="contact-icon">
-                  <Icon name="pin" size={22} />
-                </span>
+                <Icon name="pin" size={26} strokeWidth={1.4} className="map-info-icon" />
                 <div>
                   <h3>Sede</h3>
                   <address>
@@ -306,19 +295,20 @@ export default function Contactos() {
                     ))}
                   </address>
                   <a
-                    className="link-arrow"
+                    className="card-link"
                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contacts.mapQuery)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Abrir no Google Maps <Icon name="arrowUpRight" size={16} />
+                    Abrir no Google Maps
+                    <BtnArrow />
                     <span className="sr-only"> (abre numa nova janela)</span>
                   </a>
                 </div>
               </div>
             </Reveal>
-            <Reveal className="hours-card" delay={100}>
-              <Icon name="clock" size={22} />
+            <Reveal className="note-box" delay={100}>
+              <Icon name="clock" size={26} strokeWidth={1.4} />
               <p>
                 <strong>Proposta comercial formal em 24h</strong>
                 Após o diagnóstico da sua necessidade.

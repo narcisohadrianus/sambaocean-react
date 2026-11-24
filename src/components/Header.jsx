@@ -3,20 +3,42 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { nav, contacts } from '../data/site';
 import Icon from './Icon';
 
+/**
+ * Cabeçalho fixo (fundo azul da marca): logótipo à esquerda e, à direita,
+ * uma linha de utilidades (telefone, e-mail, pedir proposta) e o menu principal.
+ * Abaixo de 980px o menu passa a um painel que abre com o botão "hambúrguer".
+ */
 export default function Header() {
   const { pathname } = useLocation();
-  const isHome = pathname === '/';
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const barRef = useRef(null);
   const toggleRef = useRef(null);
-  const panelRef = useRef(null);
 
-  /* Fundo sólido depois de algum scroll */
+  /* Sombra depois de algum scroll */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  /* Altura real da barra -> variável CSS --header-h (usada pelo carrossel e pelos banners) */
+  useEffect(() => {
+    const el = barRef.current;
+    if (!el) return undefined;
+    const set = () => {
+      const h = Math.round(el.getBoundingClientRect().height);
+      if (h) document.documentElement.style.setProperty('--header-h', `${h}px`);
+    };
+    set();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', set);
+      return () => window.removeEventListener('resize', set);
+    }
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
 
   /* Fecha o menu ao mudar de página */
@@ -29,89 +51,78 @@ export default function Header() {
     if (returnFocus && toggleRef.current) toggleRef.current.focus();
   }, []);
 
-  /* Menu móvel: Esc, foco preso no painel e bloqueio do scroll */
+  /* Menu móvel: Esc fecha; fecha também se a janela crescer */
   useEffect(() => {
     if (!open) return undefined;
-    const panel = panelRef.current;
-    const focusables = () =>
-      panel ? Array.from(panel.querySelectorAll('a[href], button:not([disabled])')) : [];
-    const first = focusables()[0];
-    if (first) first.focus();
-
     const onKey = (e) => {
       if (e.key === 'Escape') {
         e.preventDefault();
         close(true);
-        return;
-      }
-      if (e.key === 'Tab') {
-        const items = [toggleRef.current, ...focusables()].filter(Boolean);
-        const idx = items.indexOf(document.activeElement);
-        if (e.shiftKey && idx <= 0) {
-          e.preventDefault();
-          items[items.length - 1].focus();
-        } else if (!e.shiftKey && idx === items.length - 1) {
-          e.preventDefault();
-          items[0].focus();
-        }
       }
     };
     const onResize = () => {
-      if (window.innerWidth > 1080) setOpen(false);
+      if (window.innerWidth > 980) setOpen(false);
     };
     document.addEventListener('keydown', onKey);
     window.addEventListener('resize', onResize);
-    document.body.classList.add('menu-open');
     return () => {
       document.removeEventListener('keydown', onKey);
       window.removeEventListener('resize', onResize);
-      document.body.classList.remove('menu-open');
     };
   }, [open, close]);
 
-  const transparent = isHome && !scrolled && !open;
-
   return (
-    <header className={`site-header${transparent ? ' is-transparent' : ' is-solid'}${open ? ' is-open' : ''}`}>
-      <div className="container header-inner">
-        <Link to="/" className="header-logo" aria-label="SAMBA OCEAN — página inicial">
-          <img
-            className="logo-color"
-            src="/img/logo.png"
-            alt="SAMBA OCEAN"
-            width="600"
-            height="220"
-          />
-          <img
-            className="logo-white"
-            src="/img/logo-branco.png"
-            alt=""
-            aria-hidden="true"
-            width="600"
-            height="220"
-          />
-        </Link>
-
-        <nav className="main-nav" aria-label="Menu principal">
-          <ul>
-            {nav.map((item) => (
-              <li key={item.to}>
-                <NavLink to={item.to} end={item.to === '/'}>
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className="header-actions">
-          <a className="header-phone" href={contacts.phoneHref} aria-label={`Ligar para ${contacts.phone}`}>
-            <Icon name="phone" size={18} />
-            <span>{contacts.phone}</span>
-          </a>
-          <Link to="/contactos#proposta" className="btn btn-primary btn-sm header-cta">
-            Pedir proposta
+    <header className={`site-header${scrolled ? ' is-scrolled' : ''}${open ? ' is-open' : ''}`}>
+      <div className="header-bar" ref={barRef}>
+        <div className="container header-inner">
+          <Link to="/" className="header-logo" aria-label="SAMBA OCEAN — página inicial">
+            <img src="/img/logo-branco.png" alt="SAMBA OCEAN" width="600" height="220" />
           </Link>
+
+          <div className="header-right">
+            <ul className="header-utility" aria-label="Contactos rápidos">
+              <li>
+                <a href={contacts.phoneHref}>
+                  <Icon name="phone" size={13} strokeWidth={1.6} />
+                  {contacts.phone}
+                </a>
+              </li>
+              <li>
+                <a href={contacts.emailHref}>
+                  <Icon name="mail" size={13} strokeWidth={1.6} />
+                  {contacts.email}
+                </a>
+              </li>
+              <li>
+                <Link to="/contactos#proposta" className="utility-cta">
+                  Pedir proposta
+                </Link>
+              </li>
+            </ul>
+
+            <nav className="main-nav" aria-label="Menu principal">
+              <ul>
+                {nav.map((item) => (
+                  <li key={item.to} className={item.children ? 'has-dropdown' : undefined}>
+                    <NavLink to={item.to}>
+                      {item.label}
+                      {item.children && <Icon name="chevronDown" size={12} strokeWidth={2} className="nav-caret" />}
+                    </NavLink>
+                    {item.children && (
+                      <ul className="dropdown">
+                        {item.children.map((c) => (
+                          <li key={c.to}>
+                            <Link to={c.to}>{c.label}</Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+
           <button
             ref={toggleRef}
             type="button"
@@ -121,37 +132,51 @@ export default function Header() {
             aria-label={open ? 'Fechar menu' : 'Abrir menu'}
             onClick={() => setOpen((v) => !v)}
           >
-            <Icon name={open ? 'close' : 'menu'} size={26} strokeWidth={2} />
+            <Icon name={open ? 'close' : 'menu'} size={26} strokeWidth={1.8} />
           </button>
         </div>
       </div>
 
-      <div
-        id="menu-movel"
-        ref={panelRef}
-        className="mobile-panel"
-        hidden={!open}
-      >
-        <nav aria-label="Menu móvel">
-          <ul>
+      <div id="menu-movel" className="mobile-panel" hidden={!open}>
+        <nav aria-label="Menu móvel" className="container">
+          <ul className="mobile-main">
             {nav.map((item) => (
               <li key={item.to}>
-                <NavLink to={item.to} end={item.to === '/'} onClick={() => close(false)}>
+                <NavLink to={item.to} onClick={() => close(false)}>
                   {item.label}
-                  <Icon name="arrowRight" size={18} />
                 </NavLink>
+                {item.children && (
+                  <ul className="mobile-sub">
+                    {item.children.map((c) => (
+                      <li key={c.to}>
+                        <Link to={c.to} onClick={() => close(false)}>
+                          {c.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
+          <ul className="mobile-utility">
+            <li>
+              <a href={contacts.phoneHref}>
+                <Icon name="phone" size={16} /> {contacts.phone}
+              </a>
+            </li>
+            <li>
+              <a href={contacts.emailHref}>
+                <Icon name="mail" size={16} /> {contacts.email}
+              </a>
+            </li>
+            <li>
+              <Link to="/contactos#proposta" onClick={() => close(false)}>
+                Pedir proposta
+              </Link>
+            </li>
+          </ul>
         </nav>
-        <div className="mobile-panel-footer">
-          <Link to="/contactos#proposta" className="btn btn-primary btn-block" onClick={() => close(false)}>
-            Pedir proposta
-          </Link>
-          <a className="btn btn-outline btn-block" href={contacts.phoneHref}>
-            <Icon name="phone" size={18} /> {contacts.phone}
-          </a>
-        </div>
       </div>
     </header>
   );

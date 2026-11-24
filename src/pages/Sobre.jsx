@@ -1,81 +1,60 @@
 import usePageMeta from '../hooks/usePageMeta';
 import { meta, company, about, mission, values, quality, officialData, images } from '../data/site';
-import PageHero from '../components/PageHero';
-import SectionHeading from '../components/SectionHeading';
+import PageBanner from '../components/PageBanner';
 import Reveal from '../components/Reveal';
-import HexMotif from '../components/HexMotif';
 import Icon from '../components/Icon';
 import CtaBand from '../components/CtaBand';
-import { Img, ValuesGrid, QualityCards, QualityStatement, Highlight } from '../components/Sections';
+import { Img, MainTitle, ValuesGrid, QualityCards, QualityStatement, Highlight } from '../components/Sections';
 
 export default function Sobre() {
   usePageMeta(meta.sobre);
 
   return (
     <>
-      <PageHero
-        eyebrow="SAMBA OCEAN · Prestação de Serviços, Lda"
-        title="Sobre Nós"
-        text="Não somos apenas transportadores. Somos parceiros operacionais que actuam na resolução de desafios logísticos críticos."
-        image={images.equipaCamiao}
-        position="center 30%"
-        crumbs={[{ label: 'Sobre Nós' }]}
-      />
+      <PageBanner title="Quem somos" image={images.camiaoEquipa} position="center 45%" crumbs={[{ label: 'Quem somos' }]} />
 
       {/* Quem somos */}
       <section className="section" aria-labelledby="quem-somos-title">
-        <div className="container split split-media-left">
-          <Reveal className="split-media media-stack">
-            <Img image={images.equipaArmazem} className="media-main" />
-          </Reveal>
+        <div className="container split">
           <div className="split-copy">
-            <SectionHeading eyebrow={about.eyebrow} title={about.title} id="quem-somos-title" />
+            <MainTitle id="quem-somos-title" title={company.name} />
             <Reveal>
               <p className="lead">{about.text}</p>
-              <ul className="pill-list">
+              <ul className="inline-tags">
                 {company.pills.map((p) => (
                   <li key={p}>{p}</li>
                 ))}
               </ul>
-              <blockquote className="pull-quote">
+              <blockquote className="statement">
                 <p>
                   <Highlight text={about.quote} phrases={about.quoteHighlights} />
                 </p>
               </blockquote>
             </Reveal>
           </div>
+          <Reveal className="split-media" delay={100}>
+            <Img image={images.equipaArmazem} />
+          </Reveal>
         </div>
       </section>
 
       {/* Missão e visão */}
-      <section className="section section-dark" aria-labelledby="missao-title">
-        <HexMotif className="section-hex" />
-        <div className="container mission-layout">
-          <Reveal className="mission-photo">
-            <Img image={images.supervisao} />
-          </Reveal>
-          <div>
-            <SectionHeading eyebrow={mission.eyebrow} title={mission.title} id="missao-title" light />
-            <div className="mission-cards">
-              <Reveal as="article" className="mission-card is-accent">
-                <h3>
-                  <span className="mission-icon">
-                    <Icon name="target" size={20} />
-                  </span>
-                  Missão
-                </h3>
-                <p>{mission.mission}</p>
-              </Reveal>
-              <Reveal as="article" className="mission-card" delay={120}>
-                <h3>
-                  <span className="mission-icon">
-                    <Icon name="compass" size={20} />
-                  </span>
-                  Visão
-                </h3>
-                <p>{mission.vision}</p>
-              </Reveal>
-            </div>
+      <section className="grey-band band-pad" aria-labelledby="missao-title">
+        <div className="container">
+          <MainTitle id="missao-title" title={mission.title} />
+          <div className="two-cols">
+            <Reveal as="article" className="text-card is-accent">
+              <h3>
+                <Icon name="target" size={24} strokeWidth={1.4} /> Missão
+              </h3>
+              <p>{mission.mission}</p>
+            </Reveal>
+            <Reveal as="article" className="text-card" delay={100}>
+              <h3>
+                <Icon name="compass" size={24} strokeWidth={1.4} /> Visão
+              </h3>
+              <p>{mission.vision}</p>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -83,19 +62,19 @@ export default function Sobre() {
       {/* Valores */}
       <section className="section" aria-labelledby="valores-title">
         <div className="container">
-          <SectionHeading eyebrow={values.eyebrow} title={values.title} intro={values.intro} id="valores-title" split />
+          <MainTitle id="valores-title" title={values.title} intro={values.intro} />
           <ValuesGrid />
         </div>
       </section>
 
       {/* Qualidade e execução */}
-      <section className="section section-tint" aria-labelledby="qualidade-title">
-        <div className="container quality-layout">
-          <Reveal className="quality-photo">
-            <Img image={images.responsavelCamiao} />
+      <section className="grey-band band-pad" aria-labelledby="qualidade-title">
+        <div className="container split split-media-left">
+          <Reveal className="split-media">
+            <Img image={images.responsavelCamiao} position="center 30%" />
           </Reveal>
-          <div>
-            <SectionHeading eyebrow={quality.eyebrow} title={quality.title} id="qualidade-title" />
+          <div className="split-copy">
+            <MainTitle id="qualidade-title" title={quality.title} />
             <QualityStatement />
             <QualityCards />
           </div>
@@ -104,19 +83,14 @@ export default function Sobre() {
 
       {/* Dados oficiais */}
       <section className="section" aria-labelledby="dados-title">
-        <div className="container official-layout">
-          <div>
-            <SectionHeading
-              eyebrow="Identificação"
-              title="Dados oficiais"
-              intro={`${company.legalName} — sociedade comercial de direito angolano, sediada em Talatona, Luanda.`}
-              id="dados-title"
-            />
-          </div>
-          <Reveal className="official-card">
-            <img className="official-symbol" src="/img/simbolo-branco.png" alt="" aria-hidden="true" width="320" height="387" loading="lazy" />
-            <p className="official-label">Dados oficiais</p>
-            <dl>
+        <div className="container">
+          <MainTitle
+            id="dados-title"
+            title="Dados oficiais"
+            intro={`${company.legalName} — sociedade comercial de direito angolano, sediada em Talatona, Luanda.`}
+          />
+          <Reveal>
+            <dl className="data-table">
               {officialData.map((d) => (
                 <div key={d.label}>
                   <dt>{d.label}</dt>

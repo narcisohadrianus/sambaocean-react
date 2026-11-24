@@ -43,14 +43,27 @@ export const officialData = [
 ];
 
 /* ---------- Navegação ---------- */
+/* Menu principal (5 entradas; o logótipo leva à página inicial).
+   "children" = submenu que abre ao passar o rato / com o teclado. */
 export const nav = [
-  { to: '/', label: 'Início' },
-  { to: '/sobre', label: 'Sobre Nós' },
-  { to: '/servicos', label: 'Serviços' },
+  { to: '/sobre', label: 'Quem somos' },
+  {
+    to: '/servicos',
+    label: 'Serviços',
+    children: [
+      { to: '/servicos#transporte', label: 'Transporte Interprovincial' },
+      { to: '/servicos#estiva', label: 'Equipas de Estiva' },
+      { to: '/servicos#maquinas', label: 'Aluguer de Máquinas' },
+      { to: '/servicos#como-actuamos', label: 'Como actuamos' },
+    ],
+  },
   { to: '/sectores', label: 'Sectores' },
-  { to: '/porque-nos', label: 'Porquê Nós' },
+  { to: '/porque-nos', label: 'Porquê nós' },
   { to: '/contactos', label: 'Contactos' },
 ];
+
+/* Menu do rodapé */
+export const footerNav = [{ to: '/', label: 'Início' }, ...nav.map(({ to, label }) => ({ to, label }))];
 
 /* ---------- Metadados (título + descrição por página) ---------- */
 export const meta = {
@@ -60,7 +73,7 @@ export const meta = {
       'Movemos Angola. Com força, segurança e pontualidade. Transporte interprovincial, equipas de estiva e aluguer de máquinas com operador especializado, a partir de Talatona, Luanda.',
   },
   sobre: {
-    title: 'Sobre Nós · SAMBA OCEAN',
+    title: 'Quem Somos · SAMBA OCEAN',
     description:
       'Conheça a SAMBA OCEAN: sociedade comercial de direito angolano, sediada em Talatona, Luanda. Missão, visão, valores e dados oficiais.',
   },
@@ -112,6 +125,38 @@ export const images = {
   sectorConstrucao: { src: '/img/sector-construcao.webp', w: 1040, h: 725, alt: 'Trabalhadores de capacete numa obra de construção civil' },
 };
 
+/* ---------- Carrossel da página inicial (4 destaques) ---------- */
+export const heroSlides = [
+  {
+    title: 'Movemos Angola',
+    text: 'Com força, segurança e pontualidade.',
+    cta: { label: 'Pedir proposta', to: '/contactos#proposta' },
+    image: images.hero,
+    position: 'center 42%',
+  },
+  {
+    title: 'Transporte Interprovincial',
+    text: 'De Luanda para todas as províncias e vice-versa.',
+    cta: { label: 'Saiba mais', to: '/servicos#transporte' },
+    image: images.camiaoEquipa,
+    position: 'center 55%',
+  },
+  {
+    title: 'Equipas de Estiva',
+    text: 'Equipas treinadas para carga e descarga com máxima segurança e rapidez.',
+    cta: { label: 'Saiba mais', to: '/servicos#estiva' },
+    image: images.armazemEstiva,
+    position: 'center 30%',
+  },
+  {
+    title: 'Aluguer de Máquinas',
+    text: 'Apoie a sua operação sem necessidade de investimento em activos fixos.',
+    cta: { label: 'Saiba mais', to: '/servicos#maquinas' },
+    image: images.maquinasOperadora,
+    position: 'center 35%',
+  },
+];
+
 /* ---------- Quem somos ---------- */
 export const about = {
   eyebrow: '01 — Quem Somos',
@@ -155,6 +200,7 @@ export const servicesIntro = {
 export const services = [
   {
     id: 'transporte',
+    filterLabel: 'Transporte',
     number: '01',
     icon: 'truck',
     eyebrow: '03 — Transporte Rodoviário',
@@ -163,9 +209,9 @@ export const services = [
     intro:
       'Transportamos mercadorias de Luanda para todas as províncias e vice-versa, com foco em segurança e acompanhamento rigoroso.',
     items: [
-      { icon: 'box', title: 'Cargas Gerais e Contentorizadas', text: 'Capacidade para mover diversos tipos de mercadorias com segurança.' },
-      { icon: 'warehouse', title: 'Distribuição Estratégica', text: 'Logística directa para empresas, armazéns e obras em todo o país.' },
-      { icon: 'route', title: 'Gestão de Rotas', text: 'Planeamento optimizado e acompanhamento em tempo real da carga.' },
+      { icon: 'box', title: 'Cargas Gerais e Contentorizadas', text: 'Capacidade para mover diversos tipos de mercadorias com segurança.', image: images.operacaoContentor },
+      { icon: 'warehouse', title: 'Distribuição Estratégica', text: 'Logística directa para empresas, armazéns e obras em todo o país.', image: images.transporteCamiao },
+      { icon: 'route', title: 'Gestão de Rotas', text: 'Planeamento optimizado e acompanhamento em tempo real da carga.', image: images.responsavelCamiao },
     ],
     highlight: { label: 'Cobertura', text: 'De Luanda para todas as províncias' },
     image: images.camiaoEquipa,
@@ -173,6 +219,7 @@ export const services = [
   },
   {
     id: 'estiva',
+    filterLabel: 'Estiva',
     number: '02',
     icon: 'team',
     eyebrow: '03 — Estiva',
@@ -180,9 +227,9 @@ export const services = [
     short: 'Carga e descarga com máxima segurança e rapidez.',
     intro: 'Disponibilizamos equipas treinadas para operações de carga e descarga com máxima segurança e rapidez.',
     items: [
-      { icon: 'container', title: 'Carga e descarga de camiões e contentores' },
-      { icon: 'package', title: 'Manuseamento de mercadoria pesada e delicada' },
-      { icon: 'warehouse', title: 'Organização logística em armazéns e obras' },
+      { icon: 'container', title: 'Carga e descarga de camiões e contentores', image: images.estivaDescarga },
+      { icon: 'package', title: 'Manuseamento de mercadoria pesada e delicada', image: images.estivaCarga },
+      { icon: 'warehouse', title: 'Organização logística em armazéns e obras', image: images.armazemCarga },
     ],
     highlight: { label: 'Equipas treinadas', text: 'Carga e descarga com máxima segurança e rapidez' },
     image: images.estivaDescarga,
@@ -190,6 +237,7 @@ export const services = [
   },
   {
     id: 'maquinas',
+    filterLabel: 'Máquinas',
     number: '03',
     icon: 'loader',
     eyebrow: '03 — Equipamentos',
@@ -197,9 +245,9 @@ export const services = [
     short: 'Equipamento com operador especializado.',
     intro: 'Apoie a sua operação sem necessidade de investimento em activos fixos.',
     items: [
-      { icon: 'forklift', title: 'Movimentação de carga em armazéns e portos' },
-      { icon: 'helmet', title: 'Apoio logístico em obras' },
-      { icon: 'operator', title: 'Equipamento com operador especializado' },
+      { icon: 'forklift', title: 'Movimentação de carga em armazéns e portos', image: images.sectorPortos },
+      { icon: 'helmet', title: 'Apoio logístico em obras', image: images.sectorConstrucao },
+      { icon: 'operator', title: 'Equipamento com operador especializado', image: images.maquinasCarregadora },
     ],
     highlight: { label: 'Equipamentos', text: 'Equipamento entregue com operador especializado' },
     image: images.maquinasOperadora,

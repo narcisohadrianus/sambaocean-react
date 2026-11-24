@@ -1,25 +1,25 @@
 import { Link } from 'react-router-dom';
-import HexMotif from './HexMotif';
 
-/** Cabeçalho compacto das páginas interiores (título + breadcrumb). */
-export default function PageHero({ eyebrow, title, text, image, position = 'center', crumbs = [] }) {
+/**
+ * Banner das páginas interiores: fotografia com véu azul, título branco
+ * em baixo à esquerda e breadcrumb (Início › Página).
+ */
+export default function PageBanner({ title, image, position = 'center', crumbs = [] }) {
   return (
-    <section className="page-hero">
+    <section className="page-banner">
       {image && (
         <img
-          className="page-hero-bg"
+          className="page-banner-img"
           src={image.src}
           alt=""
-          aria-hidden="true"
           width={image.w}
           height={image.h}
           style={{ objectPosition: position }}
           fetchpriority="high"
         />
       )}
-      <div className="page-hero-overlay" aria-hidden="true" />
-      <HexMotif className="page-hero-hex" />
-      <div className="container page-hero-inner">
+      <div className="page-banner-overlay" aria-hidden="true" />
+      <div className="container page-banner-inner">
         <nav aria-label="Breadcrumb" className="breadcrumb">
           <ol>
             <li>
@@ -32,9 +32,7 @@ export default function PageHero({ eyebrow, title, text, image, position = 'cent
             ))}
           </ol>
         </nav>
-        {eyebrow && <p className="eyebrow eyebrow-light">{eyebrow}</p>}
         <h1>{title}</h1>
-        {text && <p className="page-hero-text">{text}</p>}
       </div>
     </section>
   );

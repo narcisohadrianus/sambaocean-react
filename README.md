@@ -10,8 +10,8 @@ Feito em **React + Vite**, sem servidor (site estático). Os textos vêm da Apre
 
 | Endereço       | Página                                                                   |
 | -------------- | ------------------------------------------------------------------------ |
-| `/`            | Início (hero, quem somos, serviços, como actuamos, sectores, porquê nós) |
-| `/sobre`       | Sobre Nós (quem somos, missão, visão, valores, qualidade, dados oficiais) |
+| `/`            | Início (carrossel, serviços, como actuamos, onde estamos, porquê nós)    |
+| `/sobre`       | Quem somos (missão, visão, valores, qualidade, dados oficiais)           |
 | `/servicos`    | Serviços (`#transporte`, `#estiva`, `#maquinas`, `#como-actuamos`)       |
 | `/sectores`    | Sectores, capacidade de resposta e rede (mapa de cobertura)              |
 | `/porque-nos`  | Porquê a Samba Ocean? (seis diferenciais, qualidade e execução)          |
@@ -42,7 +42,9 @@ O site pronto fica na pasta **`dist/`**. Para ver essa versão localmente: `npm 
   (ou altere o caminho e as medidas `w`/`h` em `src/data/site.js`, na secção `images`).
 - **Logótipos**: `public/img/logo.png`, `logo-branco.png`, `simbolo.png`, `simbolo-branco.png`.
 - **Ícone do separador**: `public/favicon.ico`, `public/favicon-32.png`, `public/apple-touch-icon.png`.
-- **Cores e tipos de letra**: `src/styles/base.css` (variáveis no início do ficheiro).
+- **Cores e tipo de letra** (Inter Tight, Google Fonts): `src/styles/base.css` (variáveis no início do ficheiro).
+- **Carrossel da página inicial** (4 destaques: título, frase, botão e foto): `heroSlides` em `src/data/site.js`.
+- **Menu** (5 entradas e submenu de Serviços): `nav` em `src/data/site.js`.
 - **Dados para o Google / partilha** (título, descrição, dados da empresa): `index.html`.
 
 ## Publicar na Hostinger

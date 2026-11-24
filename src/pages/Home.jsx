@@ -1,161 +1,106 @@
 import { Link } from 'react-router-dom';
 import usePageMeta from '../hooks/usePageMeta';
-import { meta, company, about, servicesIntro, process as processInfo, sectors, why, images } from '../data/site';
-import Icon from '../components/Icon';
+import { meta, company, contacts, capacity, process as processInfo, why, values, images } from '../data/site';
+import Icon, { BtnArrow } from '../components/Icon';
 import Reveal from '../components/Reveal';
-import HexMotif from '../components/HexMotif';
-import SectionHeading from '../components/SectionHeading';
-import CtaBand from '../components/CtaBand';
-import { Img, ServiceCards, ProcessSteps, SectorCards, WhyGrid, Highlight } from '../components/Sections';
+import HeroCarousel from '../components/HeroCarousel';
+import ServiceSlider from '../components/ServiceSlider';
+import FeatureBand from '../components/FeatureBand';
+import AngolaMap from '../components/AngolaMap';
+import { DecorTruck, DecorCrane } from '../components/Decor';
+import { MainTitle, WhyGrid, ValuesGrid } from '../components/Sections';
 
 export default function Home() {
   usePageMeta(meta.home);
 
   return (
     <>
-      {/* ---------- Hero ---------- */}
-      <section className="hero" aria-labelledby="hero-title">
-        <img
-          className="hero-bg"
-          src={images.hero.src}
-          alt=""
-          aria-hidden="true"
-          width={images.hero.w}
-          height={images.hero.h}
-          fetchpriority="high"
-        />
-        <div className="hero-overlay" aria-hidden="true" />
-        <HexMotif className="hero-hex" />
-        <div className="container hero-inner">
-          <div className="hero-copy">
-            <p className="eyebrow eyebrow-light hero-eyebrow">Prestação de Serviços, Lda · {company.location}</p>
-            <h1 id="hero-title">
-              Movemos Angola.
-              <span> Com força, segurança e pontualidade.</span>
-            </h1>
-            <p className="hero-lead">{company.shortDescription}</p>
-            <div className="hero-actions">
-              <Link to="/contactos#proposta" className="btn btn-primary btn-lg">
-                Pedir proposta <Icon name="arrowRight" size={20} />
-              </Link>
-              <Link to="/servicos" className="btn btn-ghost-light btn-lg">
-                Os nossos serviços
-              </Link>
-            </div>
-            <ul className="pill-list pill-list-light" aria-label="Áreas de actuação">
-              {company.pills.map((p) => (
-                <li key={p}>{p}</li>
-              ))}
-            </ul>
-          </div>
-          <aside className="hero-card" aria-label="Operação em campo">
-            <span className="hero-card-label">Operação em campo</span>
-            <p>Descarga de contentor acompanhada pela equipa SAMBA OCEAN.</p>
-          </aside>
+      <h1 className="sr-only">
+        {company.name} — {company.tagline}
+      </h1>
+
+      {/* ---------- Carrossel ---------- */}
+      <HeroCarousel />
+
+      {/* ---------- Os nossos serviços ---------- */}
+      <section className="section services-home" aria-labelledby="servicos-title">
+        <div className="container">
+          <MainTitle id="servicos-title" title="Os nossos serviços" />
         </div>
-        <a href="#quem-somos" className="hero-scroll" aria-label="Descer para Quem Somos">
-          <span />
-        </a>
+        <ServiceSlider titleId="servicos-title" />
       </section>
 
-      {/* ---------- Quem somos (resumo) ---------- */}
-      <section className="section" id="quem-somos" aria-labelledby="quem-somos-title">
-        <div className="container split split-media-right">
-          <div className="split-copy">
-            <SectionHeading eyebrow={about.eyebrow} title={about.title} id="quem-somos-title" />
+      {/* ---------- Como actuamos (fotografia + cartão) ---------- */}
+      <FeatureBand
+        id="como-actuamos-home"
+        image={images.armazemCarga}
+        position="center 35%"
+        titleId="como-title"
+        title={processInfo.title}
+      >
+        <p>{processInfo.intro}</p>
+        <p className="feature-strong">
+          <Icon name="fileClock" size={22} strokeWidth={1.5} /> Proposta comercial formal em 24h
+        </p>
+        <Link to="/servicos#como-actuamos" className="main-btn-reverse">
+          Saiba mais
+          <BtnArrow />
+        </Link>
+      </FeatureBand>
+
+      {/* ---------- Onde estamos / cobertura nacional ---------- */}
+      <section className="section where" aria-labelledby="onde-title">
+        <DecorTruck className="decor-bl" />
+        <DecorCrane className="decor-tr" />
+        <div className="container where-grid">
+          <div className="where-copy">
+            <MainTitle id="onde-title" title="Onde estamos" />
             <Reveal>
-              <p className="lead">{about.text}</p>
-              <ul className="pill-list">
-                {company.pills.map((p) => (
-                  <li key={p}>{p}</li>
-                ))}
-              </ul>
-              <blockquote className="pull-quote">
-                <p>
-                  <Highlight text={about.quote} phrases={about.quoteHighlights} />
-                </p>
-              </blockquote>
-              <Link to="/sobre" className="btn btn-outline">
-                Conhecer a SAMBA OCEAN <Icon name="arrowRight" size={18} />
+              <p className="big-sub">Cobertura nacional</p>
+              <p className="big-label">De Luanda para todas as províncias e vice‑versa</p>
+              <p>{capacity.paragraphs[0]}</p>
+              <div className="address-block">
+                <Icon name="pin" size={22} strokeWidth={1.5} />
+                <div>
+                  <h3>Sede</h3>
+                  <address>
+                    {contacts.addressLines.map((l) => (
+                      <span key={l}>{l}</span>
+                    ))}
+                  </address>
+                </div>
+              </div>
+              <Link to="/sectores" className="main-btn">
+                Rede e sectores
+                <BtnArrow />
               </Link>
             </Reveal>
           </div>
-          <Reveal className="split-media media-stack" delay={120}>
-            <Img image={images.equipaArmazem} className="media-main" />
-            <div className="media-badge">
-              <img src="/img/simbolo.png" alt="" aria-hidden="true" width="320" height="387" loading="lazy" />
-              <div>
-                <strong>Talatona, Luanda</strong>
-                <span>Sociedade comercial de direito angolano</span>
-              </div>
-            </div>
+          <Reveal className="where-map" delay={100}>
+            <AngolaMap />
           </Reveal>
         </div>
       </section>
 
-      {/* ---------- Serviços ---------- */}
-      <section className="section section-tint" aria-labelledby="servicos-title">
+      {/* ---------- Porquê a Samba Ocean + valores ---------- */}
+      <section className="grey-band band-pad" aria-labelledby="porque-title">
         <div className="container">
-          <SectionHeading
-            eyebrow={servicesIntro.eyebrow}
-            title="Os nossos serviços"
-            intro={servicesIntro.text}
-            id="servicos-title"
-            split
-          />
-          <ServiceCards />
-        </div>
-      </section>
-
-      {/* ---------- Como actuamos ---------- */}
-      <section className="section section-dark" aria-labelledby="como-title">
-        <HexMotif className="section-hex" />
-        <div className="container">
-          <SectionHeading
-            eyebrow={processInfo.eyebrow}
-            title={processInfo.title}
-            intro={processInfo.intro}
-            id="como-title"
-            split
-            light
-          />
-          <ProcessSteps dark />
-          <Reveal className="section-footer-link">
-            <Link to="/servicos#como-actuamos" className="link-arrow link-arrow-light">
-              Ver como trabalhamos <Icon name="arrowRight" size={18} />
-            </Link>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ---------- Sectores ---------- */}
-      <section className="section" aria-labelledby="sectores-title">
-        <div className="container">
-          <SectionHeading eyebrow={sectors.eyebrow} title={sectors.title} intro={sectors.intro} id="sectores-title" split />
-          <SectorCards />
-          <Reveal className="section-footer-link">
-            <Link to="/sectores" className="link-arrow">
-              Sectores e capacidade de resposta <Icon name="arrowRight" size={18} />
-            </Link>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ---------- Porquê a Samba Ocean ---------- */}
-      <section className="section section-blue" aria-labelledby="porque-title">
-        <HexMotif className="section-hex" />
-        <div className="container why-layout">
-          <div>
-            <SectionHeading eyebrow={why.eyebrow} title={why.title} id="porque-title" light />
-            <WhyGrid variant="blue" />
+          <MainTitle id="porque-title" title={why.title} intro={why.intro} />
+          <WhyGrid />
+          <div className="values-head">
+            <h2 className="sub-title" id="valores-title">
+              {values.title}
+            </h2>
           </div>
-          <Reveal className="why-photo" delay={150}>
-            <Img image={images.colaborador} />
-          </Reveal>
+          <ValuesGrid />
+          <div className="center-row">
+            <Link to="/porque-nos" className="main-btn-reverse">
+              Porquê nós
+              <BtnArrow />
+            </Link>
+          </div>
         </div>
       </section>
-
-      <CtaBand />
     </>
   );
 }

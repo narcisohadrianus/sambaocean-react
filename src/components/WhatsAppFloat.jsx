@@ -5,6 +5,7 @@ export const whatsappDefault = `${contacts.whatsapp}?text=${encodeURIComponent(
   'Olá, SAMBA OCEAN! Gostaria de pedir uma proposta.'
 )}`;
 
+/** Botão flutuante do WhatsApp — quadrado e plano, como o resto do site. */
 export default function WhatsAppFloat() {
   return (
     <a
@@ -14,7 +15,7 @@ export default function WhatsAppFloat() {
       rel="noopener noreferrer"
       aria-label="Falar connosco pelo WhatsApp (abre numa nova janela)"
     >
-      <WhatsAppIcon size={30} />
+      <WhatsAppIcon size={26} />
     </a>
   );
 }

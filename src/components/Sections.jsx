@@ -1,10 +1,10 @@
-/* Blocos de conteúdo reutilizados em várias páginas. */
+/* Blocos de conteúdo reutilizados em várias páginas (estilo plano e quadrado). */
 import { Link } from 'react-router-dom';
 import { services, process as processInfo, insurance, sectors, why, quality, values } from '../data/site';
 import Icon from './Icon';
 import Reveal from './Reveal';
 
-export function Img({ image, className = '', eager = false, sizes }) {
+export function Img({ image, className = '', eager = false, sizes, position }) {
   return (
     <img
       className={className}
@@ -15,50 +15,31 @@ export function Img({ image, className = '', eager = false, sizes }) {
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
       sizes={sizes}
+      style={position ? { objectPosition: position } : undefined}
     />
   );
 }
 
-/* --- 3 serviços em cartões (Início) --- */
-export function ServiceCards() {
+/** Título principal de secção (azul da marca, 36px) + introdução opcional. */
+export function MainTitle({ id, title, intro, as: H = 'h2', light = false, center = false }) {
   return (
-    <div className="service-cards">
-      {services.map((s, i) => (
-        <Reveal as="article" className="service-card" key={s.id} delay={i * 90}>
-          <Link to={`/servicos#${s.id}`} className="service-card-link" aria-label={`${s.title}: saber mais`}>
-            <div className="service-card-media">
-              <Img image={s.cardImage} />
-              <span className="service-card-number">{s.number}</span>
-            </div>
-            <div className="service-card-body">
-              <span className="icon-badge">
-                <Icon name={s.icon} size={26} />
-              </span>
-              <h3>{s.title}</h3>
-              <p>{s.short}</p>
-              <span className="link-arrow" aria-hidden="true">
-                Saber mais <Icon name="arrowRight" size={18} />
-              </span>
-            </div>
-          </Link>
-        </Reveal>
-      ))}
-    </div>
+    <Reveal className={`title-block${light ? ' is-light' : ''}${center ? ' is-center' : ''}`}>
+      <H className="main-title" id={id}>
+        {title}
+      </H>
+      {intro && <p className="title-intro">{intro}</p>}
+    </Reveal>
   );
 }
 
-/* --- Como actuamos: linha temporal de 5 passos --- */
-export function ProcessSteps({ dark = false }) {
+/* --- Como actuamos: 5 passos em mosaico quadrado --- */
+export function ProcessSteps() {
   return (
-    <ol className={`process-steps${dark ? ' is-dark' : ''}`}>
+    <ol className="process-steps">
       {processInfo.steps.map((step, i) => (
-        <Reveal as="li" key={step.number} delay={i * 80} className={`process-step${step.featured ? ' is-featured' : ''}`}>
-          <div className="process-step-top">
-            <span className="process-number">{step.number}</span>
-            <span className="process-icon">
-              <Icon name={step.icon} size={24} />
-            </span>
-          </div>
+        <Reveal as="li" key={step.number} delay={i * 60} className={`process-step${step.featured ? ' is-featured' : ''}`}>
+          <span className="process-number">{step.number}</span>
+          <Icon name={step.icon} size={28} strokeWidth={1.3} className="process-icon" />
           <h3>{step.title}</h3>
         </Reveal>
       ))}
@@ -70,9 +51,7 @@ export function ProcessSteps({ dark = false }) {
 export function InsuranceNote() {
   return (
     <Reveal className="insurance-note">
-      <div className="insurance-icon">
-        <Icon name="shield" size={34} />
-      </div>
+      <Icon name="shield" size={36} strokeWidth={1.3} className="insurance-icon" />
       <div>
         <h3>{insurance.title}</h3>
         <p>{insurance.text}</p>
@@ -84,19 +63,17 @@ export function InsuranceNote() {
 /* --- Sectores de actuação --- */
 export function SectorCards({ detailed = false }) {
   return (
-    <div className={`sector-cards${detailed ? ' is-detailed' : ''}`}>
+    <div className="sector-cards">
       {sectors.items.map((s, i) => (
-        <Reveal as="article" className="sector-card" key={s.title} delay={i * 90}>
-          <div className="sector-card-media">
+        <Reveal as="article" className="flat-card sector-card" key={s.title} delay={i * 80}>
+          <div className="flat-card-media">
             <Img image={s.image} />
           </div>
-          <div className="sector-card-body">
-            <div className="sector-card-head">
-              <span className="sector-number">{s.number}</span>
-              <span className="sector-icon">
-                <Icon name={s.icon} size={22} />
-              </span>
-            </div>
+          <div className="flat-card-body">
+            <p className="card-tag">
+              <Icon name={s.icon} size={16} strokeWidth={1.5} />
+              Sector {s.number}
+            </p>
             <h3>{s.title}</h3>
             <p>{s.text}</p>
             {detailed && (
@@ -113,20 +90,31 @@ export function SectorCards({ detailed = false }) {
   );
 }
 
-/* --- Porquê a Samba Ocean: 6 diferenciais --- */
-export function WhyGrid({ detailed = false, variant = 'light' }) {
+/* --- Porquê a Samba Ocean: 6 diferenciais em mosaico --- */
+export function WhyGrid({ detailed = false }) {
   return (
-    <div className={`why-grid is-${variant}${detailed ? ' is-detailed' : ''}`}>
+    <div className={`tile-grid tiles-3${detailed ? ' is-detailed' : ''}`}>
       {why.items.map((item, i) => (
-        <Reveal as="article" className="why-card" key={item.title} delay={(i % 3) * 80}>
-          <span className="why-icon">
-            <Icon name={item.icon} size={24} />
-          </span>
-          <div>
-            <h3>{item.title}</h3>
-            <p>{item.text}</p>
-            {detailed && <p className="why-detail">{item.detail}</p>}
-          </div>
+        <Reveal as="article" className="tile" key={item.title} delay={(i % 3) * 60}>
+          <Icon name={item.icon} size={34} strokeWidth={1.2} className="tile-icon" />
+          <h3>{item.title}</h3>
+          <p>{item.text}</p>
+          {detailed && <p className="tile-detail">{item.detail}</p>}
+        </Reveal>
+      ))}
+    </div>
+  );
+}
+
+/* --- Valores --- */
+export function ValuesGrid() {
+  return (
+    <div className="tile-grid tiles-4">
+      {values.items.map((v, i) => (
+        <Reveal as="article" className="tile" key={v.title} delay={i * 60}>
+          <Icon name={v.icon} size={34} strokeWidth={1.2} className="tile-icon" />
+          <h3>{v.title}</h3>
+          <p>{v.text}</p>
         </Reveal>
       ))}
     </div>
@@ -136,12 +124,10 @@ export function WhyGrid({ detailed = false, variant = 'light' }) {
 /* --- Qualidade e execução --- */
 export function QualityCards() {
   return (
-    <div className="quality-cards">
+    <div className="tile-grid tiles-3 is-compact">
       {quality.items.map((q, i) => (
-        <Reveal as="article" className={`quality-card${i === 2 ? ' is-accent' : ''}`} key={q.title} delay={i * 90}>
-          <span className="quality-icon">
-            <Icon name={q.icon} size={24} />
-          </span>
+        <Reveal as="article" className="tile" key={q.title} delay={i * 60}>
+          <Icon name={q.icon} size={30} strokeWidth={1.2} className="tile-icon" />
           <h3>{q.title}</h3>
           <p>{q.text}</p>
         </Reveal>
@@ -153,7 +139,7 @@ export function QualityCards() {
 /* Declaração de qualidade com destaques a azul (como na apresentação) */
 export function QualityStatement() {
   return (
-    <Reveal as="blockquote" className="quality-statement">
+    <Reveal as="blockquote" className="statement">
       <p>
         <Highlight text={quality.statement} phrases={quality.statementHighlights} />
       </p>
@@ -169,19 +155,20 @@ export function Highlight({ text, phrases = [] }) {
   return parts.map((part, i) => (phrases.includes(part) ? <mark key={i}>{part}</mark> : part));
 }
 
-/* --- Valores --- */
-export function ValuesGrid() {
+/* Lista de serviços como links de texto (estilo dos filtros) */
+export function ServiceJump() {
   return (
-    <div className="values-grid">
-      {values.items.map((v, i) => (
-        <Reveal as="article" className={`value-card${i === 0 ? ' is-accent' : ''}`} key={v.title} delay={i * 80}>
-          <span className="value-icon">
-            <Icon name={v.icon} size={22} />
-          </span>
-          <h3>{v.title}</h3>
-          <p>{v.text}</p>
-        </Reveal>
-      ))}
-    </div>
+    <nav aria-label="Serviços nesta página">
+      <ul className="filter-pills">
+        {services.map((s) => (
+          <li key={s.id}>
+            <Link to={`/servicos#${s.id}`}>{s.title}</Link>
+          </li>
+        ))}
+        <li>
+          <Link to="/servicos#como-actuamos">Como actuamos</Link>
+        </li>
+      </ul>
+    </nav>
   );
 }
