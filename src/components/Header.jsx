@@ -104,7 +104,7 @@ export default function Header() {
               <ul>
                 {nav.map((item) => (
                   <li key={item.to} className={item.children ? 'has-dropdown' : undefined}>
-                    <NavLink to={item.to}>
+                    <NavLink to={item.to} end={item.to === '/'}>
                       {item.label}
                       {item.children && <Icon name="chevronDown" size={12} strokeWidth={2} className="nav-caret" />}
                     </NavLink>
@@ -142,7 +142,7 @@ export default function Header() {
           <ul className="mobile-main">
             {nav.map((item) => (
               <li key={item.to}>
-                <NavLink to={item.to} onClick={() => close(false)}>
+                <NavLink to={item.to} end={item.to === '/'} onClick={() => close(false)}>
                   {item.label}
                 </NavLink>
                 {item.children && (

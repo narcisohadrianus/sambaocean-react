@@ -43,9 +43,10 @@ export const officialData = [
 ];
 
 /* ---------- Navegação ---------- */
-/* Menu principal (5 entradas; o logótipo leva à página inicial).
+/* Menu principal (6 entradas; o logótipo também leva à página inicial).
    "children" = submenu que abre ao passar o rato / com o teclado. */
 export const nav = [
+  { to: '/', label: 'Início' },
   { to: '/sobre', label: 'Quem somos' },
   {
     to: '/servicos',
@@ -63,7 +64,7 @@ export const nav = [
 ];
 
 /* Menu do rodapé */
-export const footerNav = [{ to: '/', label: 'Início' }, ...nav.map(({ to, label }) => ({ to, label }))];
+export const footerNav = nav.map(({ to, label }) => ({ to, label }));
 
 /* ---------- Metadados (título + descrição por página) ---------- */
 export const meta = {
