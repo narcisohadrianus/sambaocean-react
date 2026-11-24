@@ -1,0 +1,332 @@
+import { useRef, useState } from 'react';
+import usePageMeta from '../hooks/usePageMeta';
+import { meta, contacts, company, formServices, provinces, images } from '../data/site';
+import PageHero from '../components/PageHero';
+import SectionHeading from '../components/SectionHeading';
+import Reveal from '../components/Reveal';
+import Icon, { WhatsAppIcon } from '../components/Icon';
+
+const initial = {
+  nome: '',
+  empresa: '',
+  telefone: '',
+  email: '',
+  servico: '',
+  origem: '',
+  destino: '',
+  mensagem: '',
+};
+
+const labels = {
+  nome: 'Nome',
+  empresa: 'Empresa',
+  telefone: 'Telefone',
+  email: 'E-mail',
+  servico: 'Serviço',
+  origem: 'Província de origem',
+  destino: 'Província de destino',
+  mensagem: 'Mensagem',
+};
+
+function validate(v) {
+  const e = {};
+  if (v.nome.trim().length < 2) e.nome = 'Indique o seu nome.';
+  const phoneDigits = v.telefone.replace(/\D/g, '');
+  if (!v.telefone.trim() && !v.email.trim()) {
+    e.telefone = 'Indique um telefone ou um e-mail para o contactarmos.';
+  }
+  if (v.telefone.trim() && (phoneDigits.length < 9 || phoneDigits.length > 15 || /[^\d\s+()-]/.test(v.telefone))) {
+    e.telefone = 'Número de telefone inválido (ex.: +244 9XX XXX XXX).';
+  }
+  if (v.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email.trim())) {
+    e.email = 'Endereço de e-mail inválido.';
+  }
+  if (!v.servico) e.servico = 'Escolha o serviço pretendido.';
+  if (v.mensagem.trim().length < 10) e.mensagem = 'Descreva brevemente a sua necessidade (mínimo 10 caracteres).';
+  return e;
+}
+
+function buildMessage(v) {
+  const lines = [
+    'Pedido de proposta — SAMBA OCEAN',
+    '',
+    `Nome: ${v.nome.trim()}`,
+    v.empresa.trim() ? `Empresa: ${v.empresa.trim()}` : null,
+    v.telefone.trim() ? `Telefone: ${v.telefone.trim()}` : null,
+    v.email.trim() ? `E-mail: ${v.email.trim()}` : null,
+    `Serviço: ${v.servico}`,
+    v.origem.trim() ? `Província de origem: ${v.origem.trim()}` : null,
+    v.destino.trim() ? `Província de destino: ${v.destino.trim()}` : null,
+    '',
+    'Mensagem:',
+    v.mensagem.trim(),
+  ];
+  return lines.filter((l) => l !== null).join('\n');
+}
+
+export default function Contactos() {
+  usePageMeta(meta.contactos);
+  const [values, setValues] = useState(initial);
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState('');
+  const formRef = useRef(null);
+  const summaryRef = useRef(null);
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setValues((v) => ({ ...v, [name]: value }));
+    if (errors[name]) setErrors((er) => ({ ...er, [name]: undefined }));
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const channel = e.nativeEvent.submitter?.value || 'email';
+    const found = validate(values);
+    setErrors(found);
+    const keys = Object.keys(found);
+    if (keys.length) {
+      setStatus('');
+      const first = formRef.current?.querySelector(`[name="${keys[0]}"]`);
+      if (first) first.focus();
+      return;
+    }
+    const text = buildMessage(values);
+    if (channel === 'whatsapp') {
+      const url = `${contacts.whatsapp}?text=${encodeURIComponent(text)}`;
+      const win = window.open(url, '_blank');
+      if (win) win.opener = null;
+      else window.location.href = url;
+      setStatus('A abrir o WhatsApp com a sua mensagem pré-preenchida. Basta carregar em enviar.');
+    } else {
+      const subject = `Pedido de proposta — ${values.servico}${values.empresa.trim() ? ` · ${values.empresa.trim()}` : ''}`;
+      window.location.href = `mailto:${contacts.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
+      setStatus('A abrir o seu programa de e-mail com a mensagem pré-preenchida. Basta carregar em enviar.');
+    }
+    if (summaryRef.current) summaryRef.current.focus();
+  };
+
+  const field = (name) => ({
+    id: `f-${name}`,
+    name,
+    value: values[name],
+    onChange,
+    'aria-invalid': errors[name] ? 'true' : undefined,
+    'aria-describedby': errors[name] ? `f-${name}-erro` : undefined,
+  });
+
+  const fieldError = (name) =>
+    errors[name] ? (
+      <p className="field-error" id={`f-${name}-erro`}>
+        {errors[name]}
+      </p>
+    ) : null;
+
+  const errorCount = Object.values(errors).filter(Boolean).length;
+
+  const contactCards = [
+    { icon: <Icon name="phone" size={24} />, label: 'Telefone', value: contacts.phone, href: contacts.phoneHref },
+    {
+      icon: <WhatsAppIcon size={24} />,
+      label: 'WhatsApp',
+      value: contacts.phone,
+      href: contacts.whatsapp,
+      external: true,
+    },
+    { icon: <Icon name="mail" size={24} />, label: 'E-mail', value: contacts.email, href: contacts.emailHref },
+    { icon: <Icon name="pin" size={24} />, label: 'Morada', value: contacts.address },
+  ];
+
+  const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(contacts.mapQuery)}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+
+  return (
+    <>
+      <PageHero
+        eyebrow="09 — Contactos"
+        title="Contactos"
+        text={company.closingTagline}
+        image={images.estivaDescarga}
+        position="center 35%"
+        crumbs={[{ label: 'Contactos' }]}
+      />
+
+      <section className="section" aria-labelledby="fale-title">
+        <div className="container">
+          <SectionHeading
+            eyebrow="Fale connosco"
+            title="Estamos em Talatona, Luanda"
+            intro="Ligue, escreva ou envie uma mensagem pelo WhatsApp. Respondemos com uma proposta comercial formal em 24h."
+            id="fale-title"
+            split
+          />
+          <ul className="contact-cards">
+            {contactCards.map((c, i) => (
+              <Reveal as="li" key={c.label} delay={i * 70} className="contact-card">
+                <span className="contact-icon">{c.icon}</span>
+                <div>
+                  <h3>{c.label}</h3>
+                  {c.href ? (
+                    <a
+                      href={c.href}
+                      {...(c.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    >
+                      {c.value}
+                      {c.external && <span className="sr-only"> (abre numa nova janela)</span>}
+                    </a>
+                  ) : (
+                    <address>{c.value}</address>
+                  )}
+                </div>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="section section-tint" id="proposta" aria-labelledby="proposta-title">
+        <div className="container contact-layout">
+          <div className="form-wrap">
+            <SectionHeading
+              eyebrow="Proposta formal em 24h"
+              title="Pedido de proposta"
+              intro="Preencha os dados e escolha como prefere enviar: por e-mail ou por WhatsApp. A mensagem abre já pré-preenchida."
+              id="proposta-title"
+            />
+            <form ref={formRef} className="quote-form" noValidate onSubmit={onSubmit}>
+              <div
+                ref={summaryRef}
+                tabIndex={-1}
+                className={`form-status${errorCount ? ' is-error' : status ? ' is-ok' : ''}`}
+                role="status"
+                aria-live="polite"
+              >
+                {errorCount > 0
+                  ? `Verifique ${errorCount === 1 ? 'o campo assinalado' : `os ${errorCount} campos assinalados`}.`
+                  : status}
+              </div>
+
+              <div className="form-grid">
+                <div className="field">
+                  <label htmlFor="f-nome">
+                    {labels.nome} <span aria-hidden="true">*</span>
+                  </label>
+                  <input type="text" autoComplete="name" required {...field('nome')} />
+                  {fieldError('nome')}
+                </div>
+                <div className="field">
+                  <label htmlFor="f-empresa">{labels.empresa}</label>
+                  <input type="text" autoComplete="organization" {...field('empresa')} />
+                </div>
+                <div className="field">
+                  <label htmlFor="f-telefone">{labels.telefone}</label>
+                  <input type="tel" autoComplete="tel" inputMode="tel" placeholder="+244" {...field('telefone')} />
+                  {fieldError('telefone')}
+                </div>
+                <div className="field">
+                  <label htmlFor="f-email">{labels.email}</label>
+                  <input type="email" autoComplete="email" inputMode="email" {...field('email')} />
+                  {fieldError('email')}
+                </div>
+                <div className="field field-full">
+                  <label htmlFor="f-servico">
+                    {labels.servico} <span aria-hidden="true">*</span>
+                  </label>
+                  <select required {...field('servico')}>
+                    <option value="">Seleccione o serviço…</option>
+                    {formServices.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                  {fieldError('servico')}
+                </div>
+                <div className="field">
+                  <label htmlFor="f-origem">{labels.origem}</label>
+                  <input type="text" list="lista-provincias" autoComplete="off" placeholder="Ex.: Luanda" {...field('origem')} />
+                </div>
+                <div className="field">
+                  <label htmlFor="f-destino">{labels.destino}</label>
+                  <input type="text" list="lista-provincias" autoComplete="off" placeholder="Ex.: Huíla" {...field('destino')} />
+                </div>
+                <datalist id="lista-provincias">
+                  {provinces.map((p) => (
+                    <option key={p} value={p} />
+                  ))}
+                </datalist>
+                <div className="field field-full">
+                  <label htmlFor="f-mensagem">
+                    {labels.mensagem} <span aria-hidden="true">*</span>
+                  </label>
+                  <textarea
+                    rows={5}
+                    required
+                    placeholder="Tipo de mercadoria, quantidades, datas previstas, local da operação…"
+                    {...field('mensagem')}
+                  />
+                  {fieldError('mensagem')}
+                </div>
+              </div>
+
+              <p className="form-note">
+                <span aria-hidden="true">*</span> Campos obrigatórios. Indique pelo menos um telefone ou um e-mail. Os dados
+                não são guardados neste site: são apenas usados para preparar a sua mensagem.
+              </p>
+
+              <div className="form-actions">
+                <button type="submit" name="canal" value="email" className="btn btn-primary btn-lg">
+                  <Icon name="mail" size={20} /> Enviar por e-mail
+                </button>
+                <button type="submit" name="canal" value="whatsapp" className="btn btn-whatsapp btn-lg">
+                  <WhatsAppIcon size={20} /> Enviar por WhatsApp
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <aside className="map-wrap" aria-label="Localização">
+            <Reveal className="map-card">
+              <div className="map-frame">
+                <iframe
+                  title="Mapa: Talatona, Luanda"
+                  src={mapSrc}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
+              </div>
+              <div className="map-info">
+                <span className="contact-icon">
+                  <Icon name="pin" size={22} />
+                </span>
+                <div>
+                  <h3>Sede</h3>
+                  <address>
+                    {contacts.addressLines.map((l) => (
+                      <span key={l}>{l}</span>
+                    ))}
+                  </address>
+                  <a
+                    className="link-arrow"
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contacts.mapQuery)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Abrir no Google Maps <Icon name="arrowUpRight" size={16} />
+                    <span className="sr-only"> (abre numa nova janela)</span>
+                  </a>
+                </div>
+              </div>
+            </Reveal>
+            <Reveal className="hours-card" delay={100}>
+              <Icon name="clock" size={22} />
+              <p>
+                <strong>Proposta comercial formal em 24h</strong>
+                Após o diagnóstico da sua necessidade.
+              </p>
+            </Reveal>
+          </aside>
+        </div>
+      </section>
+    </>
+  );
+}
