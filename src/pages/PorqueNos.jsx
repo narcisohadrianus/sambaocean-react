@@ -10,7 +10,7 @@ export default function PorqueNos() {
 
   return (
     <>
-      <PageBanner title="Porquê nós" image={images.transporteCamiao} position="center 40%" crumbs={[{ label: 'Porquê nós' }]} />
+      <PageBanner title="Porquê nós" image={images.transporteCamiao} position="center 58%" crumbs={[{ label: 'Porquê nós' }]} />
 
       <section className="section" aria-labelledby="porque-title">
         <div className="container">

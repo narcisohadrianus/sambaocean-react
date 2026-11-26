@@ -9,7 +9,7 @@ export default function NotFound() {
   usePageMeta(meta.notFound);
   return (
     <>
-      <PageBanner title="Página não encontrada" image={images.armazemCarga} crumbs={[{ label: 'Erro 404' }]} />
+      <PageBanner title="Página não encontrada" image={images.armazemCarga} position="center 38%" crumbs={[{ label: 'Erro 404' }]} />
       <section className="section">
         <div className="container not-found">
           <p className="big-label" aria-hidden="true">

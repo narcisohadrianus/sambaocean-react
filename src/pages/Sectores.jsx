@@ -13,7 +13,7 @@ export default function Sectores() {
 
   return (
     <>
-      <PageBanner title="Sectores" image={images.armazemEstiva} position="center 30%" crumbs={[{ label: 'Sectores' }]} />
+      <PageBanner title="Sectores" image={images.armazemEstiva} position="center 12%" crumbs={[{ label: 'Sectores' }]} />
 
       <section className="section" aria-labelledby="sectores-title">
         <div className="container">

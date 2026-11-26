@@ -140,7 +140,7 @@ export default function Contactos() {
 
   return (
     <>
-      <PageBanner title="Contactos" image={images.hero} position="center 40%" crumbs={[{ label: 'Contactos' }]} />
+      <PageBanner title="Contactos" image={images.hero} position="center 55%" crumbs={[{ label: 'Contactos' }]} />
 
       <section className="section" aria-labelledby="fale-title">
         <div className="container">

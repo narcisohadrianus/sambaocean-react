@@ -469,7 +469,7 @@
   position: relative;
   display: flex;
   align-items: flex-end;
-  height: clamp(300px, 26vw, 360px);
+  height: clamp(320px, 28vw, 440px);
   margin-top: var(--header-h);
   overflow: hidden;
   background: var(--navy);
@@ -895,5 +895,84 @@
 @media (max-width: 760px) {
   .decor {
     display: none;
+  }
+}
+
+/* ---------- Chamada final (faixa azul sólida) ---------- */
+.cta-solid {
+  background: #03336f;
+  color: #fff;
+  padding: 72px 0;
+}
+
+.cta-solid-inner {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.cta-solid h2 {
+  margin: 0 0 16px;
+  font-size: clamp(28px, 3.2vw, 40px);
+  line-height: 1.15;
+  color: #fff;
+}
+
+.cta-solid p {
+  margin: 0 0 12px;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 560px;
+}
+
+.cta-solid .cta-solid-tagline {
+  margin-top: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.cta-solid-actions .btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.cta-solid .main-btn {
+  border-color: #fff;
+}
+
+.cta-solid .cta-solid-outline {
+  background: transparent;
+  color: #fff;
+}
+
+.cta-solid .cta-solid-outline:hover {
+  background: #fff;
+  color: var(--brand);
+  opacity: 1;
+}
+
+.cta-solid-phone {
+  margin-top: 16px !important;
+  font-size: 15px;
+}
+
+.cta-solid-phone a {
+  color: #fff;
+  font-weight: 700;
+}
+
+.cta-solid :focus-visible {
+  outline-color: #fff;
+}
+
+@media (max-width: 860px) {
+  .cta-solid {
+    padding: 56px 0;
+  }
+
+  .cta-solid-inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
   }
 }
