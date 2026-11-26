@@ -169,6 +169,11 @@ export const images = {
   estivaPorao: { src: '/img/estiva-porao-navio.webp', w: 720, h: 480, alt: 'Vista de cima de estivadores da SAMBA OCEAN a manusear sacos no porão de um navio' },
   equipaBriefing: { src: '/img/equipa-briefing-porto.webp', w: 1280, h: 720, alt: 'Responsável da SAMBA OCEAN a orientar a equipa de operações no porto, junto a contentores e a um navio' },
   equipaPorto: { src: '/img/equipa-estiva-porto.webp', w: 1600, h: 1200, alt: 'Equipa de estiva da SAMBA OCEAN, de colete e capacete, reunida no terminal portuário' },
+  /* Fotos do carrossel da página inicial */
+  bannerBriefing: { src: '/img/banner-equipa-briefing.webp', w: 1920, h: 1080, alt: 'Responsável da SAMBA OCEAN a orientar a equipa de operações no cais, junto a contentores e a um navio' },
+  bannerCais: { src: '/img/banner-estiva-cais.webp', w: 1920, h: 1080, alt: 'Equipa de operações da SAMBA OCEAN a movimentar sacaria no cais, com camião e navio ao fundo' },
+  bannerPorao: { src: '/img/banner-estiva-porao.webp', w: 1920, h: 1084, alt: 'Vista de cima da equipa de estiva da SAMBA OCEAN a manusear sacos no porão de um navio' },
+  bannerMaquinas: { src: '/img/banner-maquinas-operadora.webp', w: 1920, h: 840, alt: 'Profissional de capacete amarelo ao telefone junto a um empilhador em armazém' },
 };
 
 /* ---------- Carrossel da página inicial (4 destaques) ---------- */
@@ -177,29 +182,29 @@ export const heroSlides = [
     title: 'Movemos Angola',
     text: 'Com força, segurança e pontualidade.',
     cta: { label: 'Pedir proposta', to: '/contactos#proposta' },
-    image: images.hero,
-    position: 'center 42%',
+    image: images.bannerBriefing,
+    position: '30% 40%',
   },
   {
     title: 'Transporte Interprovincial',
     text: 'De Luanda para todas as províncias e vice-versa.',
     cta: { label: 'Saiba mais', to: '/servicos#transporte' },
-    image: images.camiaoEquipa,
-    position: 'center 55%',
+    image: images.bannerCais,
+    position: '65% 45%',
   },
   {
     title: 'Equipas de Estiva',
     text: 'Equipas treinadas para carga e descarga com máxima segurança e rapidez.',
     cta: { label: 'Saiba mais', to: '/servicos#estiva' },
-    image: images.estivaPorto,
-    position: 'center 40%',
+    image: images.bannerPorao,
+    position: '60% 50%',
   },
   {
     title: 'Aluguer de Máquinas',
     text: 'Apoie a sua operação sem necessidade de investimento em activos fixos.',
     cta: { label: 'Saiba mais', to: '/servicos#maquinas' },
-    image: images.maquinasOperadora,
-    position: 'center 35%',
+    image: images.bannerMaquinas,
+    position: '70% 30%',
   },
 ];
 
@@ -274,7 +279,7 @@ export const services = [
     intro: 'Disponibilizamos equipas treinadas para operações de carga e descarga com máxima segurança e rapidez.',
     items: [
       { icon: 'container', title: 'Carga e descarga de camiões e contentores', image: images.estivaDescarga },
-      { icon: 'package', title: 'Manuseamento de mercadoria pesada e delicada', image: images.estivaPorao },
+      { icon: 'package', title: 'Manuseamento de mercadoria pesada e delicada', image: images.estivaCarga },
       { icon: 'warehouse', title: 'Organização logística em armazéns e obras', image: images.armazemCarga },
     ],
     highlight: { label: 'Equipas treinadas', text: 'Carga e descarga com máxima segurança e rapidez' },
