@@ -111,7 +111,7 @@ export function ValuesGrid() {
   return (
     <div className="tile-grid tiles-4">
       {values.items.map((v, i) => (
-        <Reveal as="article" className="tile" key={v.title} delay={i * 60}>
+        <Reveal as="article" className="tile tile-blue" key={v.title} delay={i * 60}>
           <Icon name={v.icon} size={34} strokeWidth={1.2} className="tile-icon" />
           <h3>{v.title}</h3>
           <p>{v.text}</p>

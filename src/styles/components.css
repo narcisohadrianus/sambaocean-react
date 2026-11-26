@@ -976,3 +976,16 @@
     gap: 28px;
   }
 }
+
+/* Cartões dos Valores em azul da marca */
+.tile.tile-blue {
+  background: #2d66ae;
+  border-color: #2d66ae;
+  color: #fff;
+}
+
+.tile.tile-blue h3,
+.tile.tile-blue p,
+.tile.tile-blue .tile-icon {
+  color: #fff;
+}
