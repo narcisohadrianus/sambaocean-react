@@ -33,9 +33,9 @@ export default function Home() {
       {/* ---------- Como actuamos (fotografia + cartão) ---------- */}
       <FeatureBand
         id="como-actuamos-home"
-        image={images.hero}
-        position="center 40%"
-        align="right"
+        image={images.equipaCais}
+        position="55% 38%"
+        align="left"
         titleId="como-title"
         title={processInfo.title}
       >

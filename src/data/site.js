@@ -169,6 +169,7 @@ export const images = {
   estivaPorao: { src: '/img/estiva-porao-navio.webp', w: 720, h: 480, alt: 'Vista de cima de estivadores da SAMBA OCEAN a manusear sacos no porão de um navio' },
   equipaBriefing: { src: '/img/equipa-briefing-porto.webp', w: 1280, h: 720, alt: 'Responsável da SAMBA OCEAN a orientar a equipa de operações no porto, junto a contentores e a um navio' },
   equipaPorto: { src: '/img/equipa-estiva-porto.webp', w: 1600, h: 1200, alt: 'Equipa de estiva da SAMBA OCEAN, de colete e capacete, reunida no terminal portuário' },
+  equipaCais: { src: '/img/equipa-cais-alinhada.webp', w: 1920, h: 1080, alt: 'Equipa de operações da SAMBA OCEAN, de colete e capacete, alinhada no cais junto a um navio e a camiões' },
   /* Fotos do carrossel da página inicial */
   bannerBriefing: { src: '/img/banner-equipa-briefing.webp', w: 1920, h: 1080, alt: 'Responsável da SAMBA OCEAN a orientar a equipa de operações no cais, junto a contentores e a um navio' },
   bannerCais: { src: '/img/banner-estiva-cais.webp', w: 1920, h: 1080, alt: 'Equipa de operações da SAMBA OCEAN a movimentar sacaria no cais, com camião e navio ao fundo' },
