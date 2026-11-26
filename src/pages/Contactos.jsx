@@ -69,6 +69,7 @@ export default function Contactos() {
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('');
+  const [sending, setSending] = useState(false);
   const formRef = useRef(null);
   const summaryRef = useRef(null);
 
@@ -99,8 +100,27 @@ export default function Contactos() {
       setStatus('A abrir o WhatsApp com a sua mensagem pré-preenchida. Basta carregar em enviar.');
     } else {
       const subject = `Pedido de proposta — ${values.servico}${values.empresa.trim() ? ` · ${values.empresa.trim()}` : ''}`;
-      window.location.href = `mailto:${contacts.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
-      setStatus('A abrir o seu programa de e-mail com a mensagem pré-preenchida. Basta carregar em enviar.');
+      setSending(true);
+      setStatus('A enviar o seu pedido…');
+      fetch('/enviar.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...values, subject, website: formRef.current?.website?.value || '' }),
+      })
+        .then((r) => r.json().catch(() => ({})).then((d) => ({ ok: r.ok && d.ok })))
+        .then(({ ok }) => {
+          if (!ok) throw new Error('falhou');
+          setValues(initial);
+          setStatus(`Obrigado! O seu pedido foi enviado para ${contacts.email}. Responderemos com uma proposta formal em 24h.`);
+        })
+        .catch(() => {
+          setStatus(`Não foi possível enviar agora. Tente novamente ou escreva directamente para ${contacts.email}.`);
+        })
+        .finally(() => {
+          setSending(false);
+          if (summaryRef.current) summaryRef.current.focus();
+        });
+      return;
     }
     if (summaryRef.current) summaryRef.current.focus();
   };
@@ -254,13 +274,18 @@ export default function Contactos() {
 
               <p className="form-note">
                 <span aria-hidden="true">*</span> Campos obrigatórios. Indique pelo menos um telefone ou um e-mail. Os dados
-                não são guardados neste site: são apenas usados para preparar a sua mensagem.
+                não são guardados neste site: são apenas enviados para a SAMBA OCEAN para responder ao seu pedido.
               </p>
 
+              <div className="hp-field" aria-hidden="true">
+                <label htmlFor="f-website">Website</label>
+                <input id="f-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+              </div>
+
               <div className="btn-row">
-                <button type="submit" name="canal" value="email" className="main-btn-reverse is-wide">
+                <button type="submit" name="canal" value="email" className="main-btn-reverse is-wide" disabled={sending}>
                   <span className="btn-label">
-                    <Icon name="mail" size={18} strokeWidth={1.6} /> Enviar por e-mail
+                    <Icon name="mail" size={18} strokeWidth={1.6} /> {sending ? 'A enviar…' : 'Enviar por e-mail'}
                   </span>
                   <BtnArrow />
                 </button>

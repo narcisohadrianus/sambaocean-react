@@ -989,3 +989,17 @@
 .tile.tile-blue .tile-icon {
   color: #fff;
 }
+
+/* Campo-armadilha anti-spam (invisível para pessoas) */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+button[disabled] {
+  opacity: 0.6;
+  cursor: wait;
+}
